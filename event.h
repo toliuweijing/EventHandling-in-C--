@@ -39,23 +39,17 @@ namespace wl {   // weijing liu(wl) library namespace
         
 
         
-        
+       Event(const Event&);
+       Event& operator=(const Event&);
         
     public:
         
         Event(){}
         
 
-        virtual ~Event()
-        {
-            for (unsigned i = 0; i < _handlers.size(); ++i) 
-            {
-                delete _handlers[i];
-                _handlers[i] = NULL;
-            }
-        }
-        
-        
+        virtual ~Event(){}
+       
+
 	// Event broadcast operator
 	// It is  called usually when the event occurs.
         void operator()(SenderT* sender, ArgT args)
@@ -76,6 +70,7 @@ namespace wl {   // weijing liu(wl) library namespace
         }
     };
     
+
 
 }
 
