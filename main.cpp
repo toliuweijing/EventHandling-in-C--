@@ -15,7 +15,7 @@ public:
 
 class B{
 public:
-  void HandleEvent(A* sender, args arg){
+  void HandleEvent(const A* sender, args arg){
     cout << "hello world" << endl;
   }
 };
@@ -26,6 +26,7 @@ int main()
   A a;
   B b;
   a._event.Add(&b, &B::HandleEvent);
+  a._event += Subscriber(&b, &B::HandleEvent);
   a._event(&a, arg);
   return 0;
 }

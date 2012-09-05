@@ -2,8 +2,7 @@
    class:  Event (template class)
    author: Weijing Liu
    date:   May 21, 2013
-   Provides a fully functional "event" class, whose usage is exactly 
-   similar to the one in C#
+   Provides a fully functional C#-like-"event" class for C++
 **********************************************************************/
 
 
@@ -17,7 +16,7 @@
 
 
 #include<vector>
-#include"base_event.h"
+#include"eventhandler.h"
 
 
 
@@ -35,7 +34,7 @@ namespace wl {   // weijing liu(wl) library namespace
     {  
         
         // event handlers of subcribers, which are the particular functions to call when the event occurs.
-        std::vector<details::Base_EventHandler<SenderT*,ArgT>* > _handlers;
+        std::vector<details::Base_EventHandler<SenderT*,ArgT,void>* > _handlers;
         
 
         
@@ -63,15 +62,22 @@ namespace wl {   // weijing liu(wl) library namespace
         
         
 	// Subscription interface for subscribers.
-        template <class ObjT>
-        void Add(ObjT *obj, void (ObjT::*memfun)(SenderT *, ArgT))
+        template <class ObjT, class RetT>
+        void Add(ObjT *obj, RetT (ObjT::*memfun)(SenderT *, ArgT))
         {
-            _handlers.push_back(new details::EventHandler<ObjT*, SenderT*, ArgT>(obj, memfun));    
+            _handlers.push_back(new details::EventHandler<ObjT*, SenderT*, ArgT, RetT>(obj, memfun));    
         }
-    };
+    
     
 
 
+
+        template <class ObjT, class RetT>
+        void operator+=(details::EventHandler<ObjT*, SenderT*, ArgT, RetT>* handler)
+        {
+            _handlers.push_back(handler); 
+        }
+    };
 }
 
 
